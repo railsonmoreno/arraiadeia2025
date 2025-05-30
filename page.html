@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arraiá IDEÁ 2025 — Reserva de Mesas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-yellow-50 font-sans">
+  <header class="bg-red-600 text-white text-center py-6">
+    <h1 class="text-4xl font-bold">🎉 Arraiá IDEÁ 2025 🎉</h1>
+    <p class="mt-2 text-lg">Reserve já sua mesa e venha curtir com a gente!</p>
+  </header>
+
+  <section class="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-2xl shadow-lg">
+    <h2 class="text-2xl font-semibold mb-4">📅 Data do evento: 22 de Junho de 2025</h2>
+    <p class="text-lg mb-2">💺 Mesas disponíveis: <span id="mesasDisponiveis" class="font-bold">71</span></p>
+    <p class="text-lg mb-6">💸 Valor por mesa: <span class="font-bold text-green-600">R$ 100,00</span></p>
+
+    <form id="formReserva" class="space-y-4">
+      <input type="text" name="nome" placeholder="Seu nome completo" required class="w-full border rounded p-3">
+      <input type="tel" name="telefone" placeholder="(00) 00000-0000" required class="w-full border rounded p-3">
+
+      <div>
+        <label class="block mb-1 font-medium">Escolha seu lado:</label>
+        <select id="ladoMesa" required class="w-full border rounded p-3">
+          <option value="">Selecione o lado</option>
+          <option value="A">Lado A (Mesas A01 a A12)</option>
+          <option value="B">Lado B (Mesas B13 a B36)</option>
+          <option value="C">Lado C (Mesas C37 a C71)</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block mb-1 font-medium">Escolha a mesa:</label>
+        <select id="numeroMesa" required class="w-full border rounded p-3">
+          <option value="">Selecione uma mesa</option>
+        </select>
+      </div>
+
+      <button type="submit" class="w-full bg-red-600 text-white py-3 rounded hover:bg-red-700">Reservar minha mesa</button>
+    </form>
+
+    <a href="https://wa.me/558432822773" target="_blank" class="block text-center mt-6 bg-green-500 text-white py-3 rounded hover:bg-green-600">📱 Falar pelo WhatsApp</a>
+  <div class="mt-8">
+  <h3 class="text-xl font-semibold mb-2">📍 Veja a disposição das mesas:</h3>
+  <img src="CROQUI_MESAS_SÃOJOÃO.jpg" alt="Croqui das mesas do evento" class="w-full border rounded-lg shadow hover:opacity-90 cursor-pointer" id="croquiImg">
+</div>
+</section>
+
+  <footer class="text-center text-sm text-gray-600 mt-10 mb-4">
+    © 2025 — Arraiá IDEÁ. Todos os direitos reservados.
+  </footer>
+
+  <script>
+    const mesasA = Array.from({length: 12}, (_, i) => `A${(i+1).toString().padStart(2, '0')}`);
+    const mesasB = Array.from({length: 24}, (_, i) => `B${(i+13).toString()}`);
+    const mesasC = Array.from({length: 35}, (_, i) => `C${(i+37).toString()}`);
+
+    let mesasDisponiveis = 71;
+
+    const ladoMesaSelect = document.getElementById('ladoMesa');
+    const numeroMesaSelect = document.getElementById('numeroMesa');
+    const mesasDisponiveisSpan = document.getElementById('mesasDisponiveis');
+
+    ladoMesaSelect.addEventListener('change', () => {
+      const lado = ladoMesaSelect.value;
+      numeroMesaSelect.innerHTML = '<option value="">Selecione uma mesa</option>';
+
+      let mesasDoLado = [];
+      if (lado === 'A') mesasDoLado = mesasA;
+      if (lado === 'B') mesasDoLado = mesasB;
+      if (lado === 'C') mesasDoLado = mesasC;
+
+      mesasDoLado.forEach(num => {
+        const option = document.createElement('option');
+        option.value = num;
+        option.textContent = `Mesa ${num}`;
+        numeroMesaSelect.appendChild(option);
+      });
+    });
+
+    document.getElementById('formReserva').addEventListener('submit', function(event) {
+      event.preventDefault();
+      if (mesasDisponiveis > 0) {
+        mesasDisponiveis--;
+        mesasDisponiveisSpan.textContent = mesasDisponiveis;
+        alert('Reserva feita com sucesso! Te esperamos no arraiá 🎉');
+        this.reset();
+        numeroMesaSelect.innerHTML = '<option value="">Selecione uma mesa</option>';
+      } else {
+        alert('Infelizmente as mesas estão esgotadas 😢');
+      }
+    });
+  </script>
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
+  <img src="CROQUI_MESAS_SÃOJOÃO.jpg" alt="Croqui ampliado" class="max-w-full max-h-full rounded-lg shadow-lg">
+</div>
+
+<script>
+  const croquiImg = document.getElementById('croquiImg');
+  const lightbox = document.getElementById('lightbox');
+
+  croquiImg.addEventListener('click', () => {
+    lightbox.classList.remove('hidden');
+  });
+
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.add('hidden');
+  });
+</script>
+</body>
+</html>
